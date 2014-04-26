@@ -6592,7 +6592,6 @@ function _lexy_encoder_start($sample_rate,$vbr_quality) {
  STACKTOP = sp;return ($70|0);
 }
 function _lexy_encoder_write($state,$input_buffer_left,$input_buffer_right,$num_samples) {
-  console.log($input_buffer_left);
  $state = $state|0;
  $input_buffer_left = $input_buffer_left|0;
  $input_buffer_right = $input_buffer_right|0;
@@ -6921,7 +6920,6 @@ function _lexy_test() {
  $53 = $state;
  $54 = (($53) + 676|0);
  $55 = HEAP32[$54>>2]|0;
- console.log( 'left', $51 );
  _lexy_encoder_write($50,$51,$52,$55);
  $56 = $state;
  _lexy_encoder_finish($56);
@@ -41277,5 +41275,5 @@ run();
 
 // {{MODULE_ADDITIONS}}
 
-
+window.Module = Module;
 
