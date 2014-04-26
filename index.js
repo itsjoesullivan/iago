@@ -1,10 +1,27 @@
 
-var Iago = module.exports = function() {
+var Iago = module.exports = function(object) {
   if(! window.Module ) {
-    require('iago/vorbis.small.js');
+    require('./vorbis.small.js');
   }
 
-  this.input = context.createScriptProcessor(1024, 2, 2);
+  // Handle AudioBuffers immediately?
+  if (object instanceof window.AudioBuffer) {
+    this.buffer = object;
+    this.state = Module._lexy_encoder_start(44100, 3);
+    this.write({
+      inputBuffer: this.buffer
+    });
+    this.getBlob();
+    return;
+  }
+  
+  if (object instanceof window.OfflineAudioContext) {
+    this.context = object;
+  } else if (object instanceof widow.AudioContext) {
+    this.context = object;
+  }
+
+  this.input = this.context.createScriptProcessor(16384, 2, 2);
   this.input.onaudioprocess = this.write.bind(this);
 
   this.state = Module._lexy_encoder_start(44100, 3);
@@ -18,19 +35,19 @@ Iago.prototype.write = function( e ) {
     throw "No more writes.";
   }
 
-  var buffers = [ e.inputBuffer.getChannelData(0), e.inputBuffer.getChannelData(1) ];
+  var l = e.inputBuffer.getChannelData(0);
+  var r = e.inputBuffer.getChannelData(1);
 
-  // Grab data
-  var inbuf_l = Module._malloc(buffers[0].length * 4);
-  var inbuf_r = Module._malloc(buffers[1].length * 4);
-  for (var i=0;i<buffers[0].length;i++) {
-    Module.setValue(inbuf_l + (i*4), buffers[0][i], 'float');
-    Module.setValue(inbuf_r + (i*4), buffers[1][i], 'float');
-  }
+  var inbuf_l = Module._malloc(l.length*l.BYTES_PER_ELEMENT);
+  Module.HEAPF32.set( l, inbuf_l>>2 );
 
-  // Write data
-  Module._lexy_encoder_write( this.state, inbuf_l, inbuf_r, buffers[0].length );
+  var inbuf_r = Module._malloc(r.length*r.BYTES_PER_ELEMENT);
+  Module.HEAPF32.set( r, inbuf_r>>2 );
 
+  Module._lexy_encoder_write( this.state, inbuf_l, inbuf_r, l.length );
+
+  Module._free(inbuf_l);
+  Module._free(inbuf_r);
 };
 
 Iago.prototype.getBlob = function() {
