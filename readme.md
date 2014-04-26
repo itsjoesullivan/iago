@@ -2,7 +2,7 @@
 
 encode ogg in the browser
 
-Credit where credit is due
+###Credit where credit is due
 
 - Thanks to halfvector for the initial work on this:
   - http://hotcashew.com/2014/02/chrome-audio-api-and-ogg-vorbis/
