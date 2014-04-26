@@ -14,10 +14,16 @@ encode ogg in the browser
 - Thanks to shovon for moving ogg.js forward and improved documentation
   - https://github.com/shovon/libvorbis.js
 
+###Usage
+
 ```javascript
 var iago = new Iago();
-stream.connect( iago.input );
-// Do your stream thing
-var b = stream.getBlob();
 
+// PCM stream issuing AudioProcessingEvents
+stream.connect( iago.input );
+
+// Do your stream thing
+
+// Get your compressed ogg
+var b = stream.getBlob();
 ```
