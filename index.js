@@ -50,7 +50,7 @@ var Iago = module.exports = function(object) {
     this.context = this.source.context;
   }
 
-  this.input = this.context.createScriptProcessor(4096, 2, 0);
+  this.input = this.context.createScriptProcessor(4096, 2, 2);
   this.input.onaudioprocess = this.write.bind(this);
   this.input.connect(this.context.destination);
 
