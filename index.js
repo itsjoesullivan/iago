@@ -103,7 +103,3 @@ Iago.prototype.download = function() {
   a.click();
 
 };
-
-
-
-
