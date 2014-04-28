@@ -1,12 +1,13 @@
-var Iago = require('iago');
 
 window.context = new AudioContext();
 
-navigator.mozGetUserMedia({audio: true}, function(mediaStream) {
+navigator.webkitGetUserMedia({audio: true}, function(mediaStream) {
   var src = context.createMediaStreamSource( mediaStream );
   encode( src );
 
 }, function() {});
+
+var Iago = require('iago');
 
 function encode( source ) {
 
@@ -19,6 +20,6 @@ function encode( source ) {
     console.log(b);
     //d.stop();
     //var b = d.getBlob();
-  }, 5000);
+  }, 20 * 1000);
 
 }

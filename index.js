@@ -8,31 +8,52 @@ var Iago = module.exports = function(object) {
   if (object instanceof window.AudioBuffer) {
     this.buffer = object;
     this.state = Module._lexy_encoder_start(44100, 3);
-    this.write({
-      inputBuffer: this.buffer
-    });
+    var len = this.buffer.length;
+    var pos = 0;
+    var end = len;
+    var one = function(i) {
+      return this.buffer.getChannelData(i).subarray(pos, end);
+    }.bind(this);
+    while(len > pos) {
+      end = pos + 4096;
+      if(end > len) {
+        end = len;
+      }
+
+      this.write({
+        inputBuffer: {
+          getChannelData: one
+        }
+      });
+      pos = end;
+    }
     this.getBlob();
     return;
   }
   
   if (object instanceof window.OfflineAudioContext) {
     this.context = object;
-  } else if (object instanceof widow.AudioContext) {
+  } else if (object instanceof window.AudioContext) {
     this.context = object;
+  } else if (object instanceof window.MediaStreamAudioSourceNode) {
+    this.source = object;
+    this.context = this.source.context;
   }
 
-  this.input = this.context.createScriptProcessor(16384, 2, 2);
+  this.input = this.context.createScriptProcessor(4096, 2, 0);
   this.input.onaudioprocess = this.write.bind(this);
+  this.input.connect(this.context.destination);
 
-  this.state = Module._lexy_encoder_start(44100, 3);
+  this.state = Module._lexy_encoder_start(44100, 1);
 
 };
 
 
 Iago.prototype.write = function( e ) {
+
   if (this.done) {
+    // No more writes"
     return;
-    throw "No more writes.";
   }
 
   var l = e.inputBuffer.getChannelData(0);
@@ -50,7 +71,7 @@ Iago.prototype.write = function( e ) {
   Module._free(inbuf_r);
 };
 
-Iago.prototype.getBlob = function() {
+Iago.prototype.getBlob = function(cb) {
 
   if (this.blob) {
     return this.blob;
