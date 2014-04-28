@@ -5,7 +5,7 @@ var Iago = module.exports = function(object) {
   this.thread = new Thread(function() {
 
     // Import vorbis into worker
-    importScripts( 'http://local.scat.io:3000/vorbis.small.js' );
+    importScripts( 'https://s3.amazonaws.com/scat/lib/iago/vorbis.small.js' );
 
     // Initialize
     var state = Module._lexy_encoder_start(44100, 3);
@@ -45,14 +45,16 @@ var Iago = module.exports = function(object) {
     });
   });
   
+  if (object instanceof window.MediaStreamAudioSourceNode) {
+    this.source = object;
+    this.context = this.source.context;
+  }
 
   this.input = this.context.createScriptProcessor(4096, 2, 0);
   this.input.onaudioprocess = this.write.bind(this);
   this.input.connect(this.context.destination);
 
   if (object instanceof window.MediaStreamAudioSourceNode) {
-    this.source = object;
-    this.context = this.source.context;
     this.source.connect( this.input );
   }
 
