@@ -17,13 +17,14 @@ encode ogg in the browser
 ###Usage
 
 ```javascript
-var iago = new Iago();
 
-// PCM stream issuing AudioProcessingEvents
-stream.connect( iago.input );
+// stream is 
+var iago = new Iago( stream );
 
 // Do your stream thing
 
 // Get your compressed ogg
-var b = stream.getBlob();
+iago.getBlob( function( err, blob ) {
+  // blob is of type audio/ogg
+});
 ```

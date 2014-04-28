@@ -37,7 +37,6 @@ var Iago = module.exports = function(object) {
       // Get pointer
       var ptr = Module._lexy_get_buffer( state );
 
-
       var oggData = new Uint8Array( Module.HEAPU8.subarray( ptr, 
         ptr + Module._lexy_get_buffer_length( state ) ) 
       );
@@ -46,14 +45,16 @@ var Iago = module.exports = function(object) {
     });
   });
   
-  if (object instanceof window.MediaStreamAudioSourceNode) {
-    this.source = object;
-    this.context = this.source.context;
-  }
 
   this.input = this.context.createScriptProcessor(4096, 2, 0);
   this.input.onaudioprocess = this.write.bind(this);
   this.input.connect(this.context.destination);
+
+  if (object instanceof window.MediaStreamAudioSourceNode) {
+    this.source = object;
+    this.context = this.source.context;
+    this.source.connect( this.input );
+  }
 
 };
 
