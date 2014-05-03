@@ -1,7 +1,7 @@
 {
   "name": "iago",
   "description": "encode pcm to ogg vorbis",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "keywords": [],
   "dependencies": {
     "itsjoesullivan/thread": "1.0.1"
