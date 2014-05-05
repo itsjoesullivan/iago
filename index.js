@@ -5,7 +5,7 @@ var Iago = module.exports = function(object) {
   this.thread = new Thread(function() {
 
     // Import vorbis into worker
-    importScripts( 'https://s3.amazonaws.com/scat/lib/iago/vorbis.small.js' );
+    importScripts( 'https://s3.amazonaws.com/scat/lib/iago/vorbis.js' );
 
     // Initialize
     var state = Module._lexy_encoder_start(44100, 3);
