@@ -2,8 +2,6 @@
 
 encode ogg in the browser
 
-- something odd about ScriptProcessorNode in chrome right now, but firefox is working fine.
-
 ###Credit where credit is due
 
 - Thanks to halfvector for the heavy work on this:
