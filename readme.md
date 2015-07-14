@@ -1,6 +1,6 @@
 #iago
 
-Component for encoding Ogg in the browser. 
+Module for encoding Ogg in the browser. 
 
 - Stream to the encoder--your compressed audio is ready when the recording is finished
 - Uses a web worker for the actual compression; UI thread is free
@@ -19,7 +19,7 @@ Component for encoding Ogg in the browser.
 
 Install the component:
 ```bash
-component install itsjoesullivan/iago
+npm install iago
 ```
 
 Use it:
@@ -28,13 +28,13 @@ var Iago = require('iago');
 
 var context = new AudioContext();
 var iago;
-navigator.getUserMedia({ audio: true }, function( handle ) {
-  var stream = context.createMediaStreamSource( handle );
-  iago = new Iago( stream );
+navigator.getUserMedia({ audio: true }, function(handle) {
+  var stream = context.createMediaStreamSource(handle);
+  iago = new Iago(stream);
 });
 
 // When finished:
-iago.getBlob( function( err, blob ) {
+iago.getBlob().then(function(blob) {
   // blob is of type audio/ogg
 });
 ```

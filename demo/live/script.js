@@ -1,25 +1,20 @@
-
 window.context = new AudioContext();
 
 navigator.webkitGetUserMedia({audio: true}, function(mediaStream) {
-  var src = context.createMediaStreamSource( mediaStream );
-  encode( src );
-
+  var src = context.createMediaStreamSource(mediaStream);
+  encode(src);
 }, function() {});
 
-var Iago = require('iago');
+var Iago = require('../../index');
 
-function encode( source ) {
-
+function encode(source) {
   source.connect(context.destination);
-  var iago = new Iago();
+  var iago = new Iago(source);
   source.connect(iago.input);
   setTimeout(function() {
-    iago.getBlob();
-    var b = iago.download();
-    console.log(b);
-    //d.stop();
-    //var b = d.getBlob();
-  }, 20 * 1000);
+    iago.getBlob().then(function(blob) {
+      iago.download();
+    });
+  }, 5 * 1000);
 
 }

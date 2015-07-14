@@ -1,6 +1,7 @@
-var Iago = require('iago');
-
+var Iago = require('../../index');
 window.context = new AudioContext();
+
+// Prepare the audio file
 var request = new XMLHttpRequest();
 request.open('GET', 'ff.wav', true);
 request.responseType = 'arraybuffer';
@@ -15,18 +16,14 @@ function encode(buffer) {
   var source = context.createBufferSource();
   source.buffer = buffer;
   source.connect(context.destination);
-  //var d = new Dub( source );
-  //d.start();
-  var iago = new Iago();
+  var iago = new Iago(context);
   source.connect(iago.input);
+  // Play the audio file.
   source.start(0);
   setTimeout(function() {
-    iago.getBlob();
-    var b = iago.download();
     source.stop();
-    console.log(b);
-    //d.stop();
-    //var b = d.getBlob();
+    iago.getBlob().then(function(blob) {
+      iago.download();
+    });
   }, 5000);
-
 }
